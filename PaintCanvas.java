@@ -31,7 +31,7 @@ public class PaintCanvas extends JPanel {
         
         Rectangle clipBounds = g.getClipBounds();
         g.setColor(Color.white);
-        g.fillRect((int)clipBounds.getX(), (int)clipBounds.getX(), 
+        g.fillRect((int)clipBounds.getX(), (int)clipBounds.getY(),
                     (int)clipBounds.getWidth(), (int)clipBounds.getHeight());
         
         Iterator paintObjectIterator = paintObjects.iterator();
@@ -75,6 +75,18 @@ public class PaintCanvas extends JPanel {
         
         history.addElement(new Vector(paintObjects));
         paintObjects.addElement(newObject);
+
+        // Calculate expansion if object goes outside bounds
+        Rectangle rect = newObject.getBoundingBox();
+        int neededWidth = (int) (rect.getX() + rect.getWidth());
+        int neededHeight = (int) (rect.getY() + rect.getHeight());
+        int newWidth = Math.max(getPreferredSize().width, neededWidth);
+        int newHeight = Math.max(getPreferredSize().height, neededHeight);
+
+        if (newWidth > getPreferredSize().width || newHeight > getPreferredSize().height) {
+            setPreferredSize(new Dimension(newWidth, newHeight));
+            revalidate();
+        }
         repaint();
         
     }
@@ -91,7 +103,7 @@ public class PaintCanvas extends JPanel {
         
         paintObjects = (Vector)history.lastElement();
         history.removeElement(history.lastElement());
-        
+        repaint();
     }
 
 
