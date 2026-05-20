@@ -25,8 +25,8 @@ public class PaintWindow extends JFrame implements PaintObjectConstructorListene
     private ChangeListener colorChangeListener = new ChangeListener() {
         
         public void stateChanged(ChangeEvent changeEvent) {
-            
-	        objectConstructor.setColor(new Color(rSlider.getValue(), gSlider.getValue(), gSlider.getValue()));
+
+            objectConstructor.setColor(new Color(rSlider.getValue(), gSlider.getValue(), bSlider.getValue()));
             repaint();
             
         }
@@ -71,7 +71,7 @@ public class PaintWindow extends JFrame implements PaintObjectConstructorListene
         pencilButton.setSelected(true);
         eraserButton = new JRadioButton(actions.eraserAction);
         eraserButton.setOpaque(false);
-        lineButton = new JRadioButton("Line");
+        lineButton = new JRadioButton(actions.lineAction);
         lineButton.setOpaque(false);
         
         toolButtonGroup = new ButtonGroup();
@@ -81,11 +81,25 @@ public class PaintWindow extends JFrame implements PaintObjectConstructorListene
         
         toolPanel = new JPanel();
         toolPanel.setOpaque(false);
-        toolPanel.setLayout(new BoxLayout(toolPanel, BoxLayout.Y_AXIS));
+//        toolPanel.setLayout(new BoxLayout(toolPanel, BoxLayout.Y_AXIS));
+//        toolPanel.add(pencilButton);
+//        toolPanel.add(eraserButton);
+//        toolPanel.add(lineButton);
         toolPanel.add(pencilButton);
         toolPanel.add(eraserButton);
         toolPanel.add(lineButton);
-        
+
+        final JSlider thicknessSlider = new JSlider(1, 50, 5);
+        thicknessSlider.setOpaque(false);
+        thicknessSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                objectConstructor.setThickness(thicknessSlider.getValue());
+            }
+        });
+        toolPanel.add(new JLabel("Thickness"));
+        toolPanel.add(thicknessSlider);
+
+
         rPanel = new JPanel(new FlowLayout());
         rPanel.setOpaque(false);
         rPanel.add(new JLabel("Red"));
